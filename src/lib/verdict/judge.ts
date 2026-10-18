@@ -44,7 +44,11 @@ export async function judge(input: JudgeInput): Promise<{ summary: string; findi
   if (!process.env.ANTHROPIC_API_KEY) return fallbackRuling(input);
 
   try {
-    const client = new Anthropic();
+    // Explicit base URL so a stray ANTHROPIC_BASE_URL in the environment can't redirect the key.
+    const client = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
+      baseURL: process.env.VERDICT_ANTHROPIC_BASE_URL ?? "https://api.anthropic.com",
+    });
     const response = await client.messages.parse({
       model: JUDGE_MODEL,
       max_tokens: 4000,
