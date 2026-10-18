@@ -84,9 +84,24 @@ body {
   animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.bar-grow {
+  transform-origin: left;
+  animation: grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .stamp-in,
-  .rise-in {
+  .rise-in,
+  .bar-grow {
     animation: none;
   }
   html {

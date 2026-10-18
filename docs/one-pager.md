@@ -1,102 +1,107 @@
-# Warrant — One-Pager
+# Verdict — One-Pager
 
 Oct 18, 2026 · @Davies Odu
 
 ## The pitch
 
-**Warrant gives merchants proof of what a human actually authorized their AI agent to buy, attached to every dispute automatically.**
+**Verdict is the dispute layer for agent-to-agent commerce: escrow, evidence and a ruling in seconds when a machine-paid job goes wrong.**
 
-*Working name: a warrant is a written authority to act on someone's behalf.*
+*Working name.*
 
-**Problem.** When an agent buys, the merchant never sees the human's instruction. If the customer later says "I didn't tell it to buy that," the merchant has no evidence, eats the chargeback, and the dispute counts against its monitoring ratios. The proof (the mandate the human gave the agent) sits with the agent platform, not the merchant.
+**Problem.** Cards have chargebacks. Stablecoin machine payments (x402, MPP on stablecoin rails) settle instantly with no chargeback mechanism. When agent A pays agent B for work and B delivers junk, there is nothing to appeal to and no way to get the money back.
 
 **Why now.**
 
-- **Q4 2026** is the first holiday season with consumer shopping agents at scale (Claude Commerce Agents, Copilot Checkout).
-- **Jan–Mar 2027:** holiday disputes arrive.
-- **\~Apr 2027:** the earliest analysts expect binding Visa or Mastercard rules for agent-initiated disputes.
+- Machine payment protocols are live: x402 in production, Stripe and Tempo's MPP since March 2026, streaming payments since April 2026.
+- Agents can now hire agents: agent-to-agent channels (Inkbox) and agent marketplaces (Coinbase Agent.market) are live.
+- Volume is still small, so the dispute layer can be set before it is needed at scale.
 
-That gap is the window: disputes arrive months before the rules do.
+**One line:** "Cards have chargebacks. Machine payments have nothing. Verdict is the dispute layer for agents."
 
 ## Landscape and positioning
 
-**The industry has written the standard; nobody runs it end to end yet. Warrant is the working implementation on Stripe.**
+**Six players are circling agent disputes, mostly crypto-native juries that vote over hours or days. Verdict reproduces the disputed work and rules in seconds, with escrow on Stripe.**
 
-| Player | What they're doing | Status |
+| Player | Mechanism | Where Verdict differs |
 | --- | --- | --- |
-| Mastercard + Google | Verifiable Intent: open-source spec linking identity, agent instructions and outcome into a signed record for disputes | Spec + reference code (Mar 2026) |
-| Visa | Compelling Evidence 3.0 counts agentic provider login IDs as dispute evidence | Live Oct 24, 2026 |
-| EMVCo | Draft framework for a shared record of consumer intent | Draft, not a rule |
-| Stripe | ACP + Shared Payment Tokens; Smart Disputes auto-builds evidence. Merchant still manages disputes | Live; no agent mandates in evidence yet |
-| CertNode | Signs mandate + cart + receipt into one evidence package | Live, merchant-side only |
-| Chargeflow, Justt, Chargebacks911 | Dispute automation, positioning for agentic disputes | Live |
+| Kleros (ai.kleros.io) | Staked human jurors vote | Human-speed, token-based |
+| GenLayer / Internet Court | Rotating AI validators vote on evidence | Reads evidence; does not re-run the work |
+| UMA Optimistic Oracle + ERC-8183 | Token-holder vote if disputed; escrow standard | On-chain, slow escalation |
+| Labarna (ADRE) | Automated dispute filing on card networks | Card disputes, not machine payments |
+| Agent Dispute | Auction-based arbitration, evidence ledger | Early, no public pricing |
+| AAA AI Arbitrator | AI drafts; a human issues the award | Not agent-facing |
+| Card networks, Stripe Smart Disputes | Chargebacks on card payments | No coverage for stablecoin machine payments |
 
-**The gap:** the mandate lives with the agent platform, and the merchant only needs it weeks later, at dispute time. Nothing routes it across.
+*Rows 1–6 come from our September 2026 research and have not been independently verified; check them before pitching.*
 
-**Positioning:** "Mastercard and Google wrote the standard. Warrant makes it work on Stripe today: the agent signs at purchase, and the proof shows up in the dispute automatically."
+**Three differentiators:**
+
+1. **Reproduce, don't just read.** For digital work (data, code, API results), the judge re-runs the acceptance checks in a sandbox instead of weighing stories.
+2. **Seconds, not days.** Machine-speed rulings for machine-speed transactions.
+3. **Fiat and Stripe-native.** Escrow is a Stripe authorization hold, not a token.
 
 ## How it works
 
-**The agent signs the human's limits at purchase; when a dispute arrives, Warrant attaches that proof to it automatically.**
+**Funds are held when the job starts; if the buyer disputes, Verdict re-runs the work, rules, and splits the payout.**
 
-&#91;embedded content: mandate-to-dispute flow · purchase, then dispute weeks later\]
+&#91;embedded content: escrow-to-ruling flow · accepted path and disputed path\]
 
-The two highlighted boxes are Warrant; everything else is the existing Stripe flow.
+The two highlighted steps are what Verdict adds; escrow and payout run on Stripe.
 
 ## Hackathon build
 
-**Four components, all in Stripe test mode, with each sponsor doing a real job.**
+**Six components in Stripe test mode; the core is the sandbox reproduction plus a judge that outputs a payout split.**
 
 | Component | What it does | Sponsor |
 | --- | --- | --- |
-| Mandate signer | At purchase, the agent records what the human authorized (item, price cap, expiry, the human's words) and signs it with its agent identity | Inkbox (agent identity) |
-| Mandate store + MCP server | Agents deposit mandates keyed to the Stripe PaymentIntent ID; exposed as MCP tools `deposit_mandate` and `get_mandate` | Manufact (hosting), Supabase or InsForge (storage) |
-| Dispute bridge | Listens for Stripe `charge.dispute.created`, fetches the matching mandate, verifies the signature, and submits it as dispute evidence via Stripe's API | Stripe |
-| Merchant view | One page: disputes, matched mandates, evidence submitted, outcome | — |
+| Contract + escrow | `open_escrow` records the job spec with machine-checkable acceptance criteria and creates a PaymentIntent with manual capture (an authorization hold) | Stripe |
+| Agent channel | Agents A and B agree on the contract; both identities sign it | Inkbox |
+| Arbitrator MCP server | Tools: `open_escrow`, `deliver`, `file_dispute`, `submit_evidence`, `get_ruling` | Manufact |
+| Reproduction | Re-runs the acceptance checks against B's delivered output in an isolated sandbox | Blaxel |
+| Judge | A frontier model reads contract, evidence and reproduction results; outputs a ruling with cited evidence and a payout split as JSON | Claude / GPT API |
+| Store + settlement | Saves contracts, evidence and rulings; captures B's share of the hold and releases the rest | Supabase or InsForge, Stripe |
 
 **Build order**
 
-1. Mandate schema aligned with Verifiable Intent / AP2 fields (intent, cart, payment).
-2. Store + MCP server on Manufact.
-3. Demo agent that buys from a test Stripe merchant and deposits a mandate.
-4. Webhook bridge that auto-submits evidence.
-5. Merchant view and rehearsal.
+1. Contract schema: task, price, acceptance checks, deadline.
+2. Escrow with manual capture in Stripe test mode.
+3. Blaxel runner that executes acceptance checks on delivered output.
+4. Judge prompt with structured output: findings, citations, payout split.
+5. MCP server on Manufact; two demo agents (buyer, seller).
+6. Ruling page and rehearsal.
 
-**Cut:** real card networks, multi-merchant routing, selective disclosure, pricing.
+**Cut:** appeals, reputation, multi-currency, non-verifiable work (design, writing quality).
 
-## Demo script (2 minutes)
+## Demo script (90 seconds)
 
-1. **Hook (15s):** "This is the first holiday season where agents shop for people. In January the disputes arrive, and the card networks' rules won't land until spring."
-2. **Purchase (30s):** The user tells an agent: "Buy noise-cancelling headphones under $200." The agent buys a $179 pair; Warrant stores the signed mandate.
-3. **Dispute (20s):** Trigger a dispute with a Stripe test card: "I didn't authorize this."
-4. **Proof (40s):** The webhook fires, Warrant matches the mandate, verifies the signature, and submits evidence. The merchant view shows: "max $200, noise-cancelling, approved 3:14pm, signed by agent X."
-5. **Close (15s):** "Mastercard and Google wrote the standard. Warrant makes it work on Stripe today."
+1. **Hook (15s):** "Cards have chargebacks. Machine payments have nothing. When an agent pays another agent for junk, the money is gone."
+2. **The job (20s):** Agent A hires agent B: "100 verified company emails for $5." Verdict opens an escrow hold on Stripe.
+3. **Bad delivery (10s):** B delivers 100 rows; 40 are fake.
+4. **Dispute (30s):** A files a dispute. Verdict re-runs email verification in a Blaxel sandbox, finds 40% fail, compares against the contract, and issues a ruling with cited evidence.
+5. **Money moves (15s):** Stripe captures $3 for B and releases $2 back to A, live in the dashboard.
 
-Pre-create one purchase before going on stage so only the dispute runs live.
+Pre-build the job and delivery before going on stage so only the dispute and ruling run live.
 
 ## Risks and open questions
 
-**The core risk is that card networks or Stripe build this themselves; the hackathon pitch should own that rather than hide it.**
+**The biggest risk is a wrong ruling moving real money; limit the first version to work whose acceptance can be checked by running code.**
 
 | Risk | Severity | Response |
 | --- | --- | --- |
-| Mastercard, Visa or Stripe ship it natively | High | Frame as the working implementation of an open standard; the likely exit is acquisition, like Ethoca and Verifi |
-| Agent platforms (OpenAI, Anthropic, Google) won't send mandates | High | Start with merchants who run their own agent or checkout; ask platforms after proving dispute win rates |
-| Issuers don't accept mandates as compelling evidence | Medium | Test win rates with design partners; align fields with Verifiable Intent and Visa CE 3.0 |
-| Privacy of the human's instructions | Medium | Store hashes and disclose only fields needed for the dispute (selective disclosure, later) |
-| Stablecoin rails (x402) have no chargebacks | Low | Out of scope; card rails first |
+| Judge makes a wrong ruling | High | Only arbitrate machine-checkable criteria; every ruling cites the reproduction results; add an appeal path later |
+| Holding funds raises money-transmission questions | High (as a company) | Stripe holds funds via authorization; move to Stripe Connect before scaling |
+| Seller games the acceptance checks | Medium | Hidden test cases sampled at dispute time, not shared in advance |
+| Crypto protocols add fiat, or Stripe adds escrow disputes | Medium | Win on speed and reproduction; integrate rather than compete with Stripe |
+| Card authorization holds expire after a few days | Low | Fine for short jobs; longer jobs need a different escrow |
+| Only works for verifiable digital work | Medium | Start there: data, code, API results |
 
-**Open questions:** Which reason codes do mandates actually win? Does Stripe's API accept structured mandate data, or only uploaded files as evidence?
+**Open questions:** Will both agents' operators accept a third-party ruling up front? What is the right fee: per escrow, or per dispute?
 
 ## Sources
 
-- [Why agent chargeback rules likely miss the 2026 holidays](https://shopappy.com/payments/card-networks/agent-chargeback-rules-holiday-2026)
-- [Agentic payments and chargebacks: a merchant guide (chargeback.io)](https://www.chargeback.io/blog/agentic-payments-chargebacks)
-- [AI agent chargeback liability (Chargeflow)](https://www.chargeflow.io/blog/ai-agent-chargeback-liability)
-- [Mastercard and Google Verifiable Intent (Fintech News)](https://fintechnews.sg/127287/ai/mastercard-google-verifiable-intent/)
-- [Visa widens chargeback evidence rules from Oct. 24](https://ecommerceparadise.com/visa-chargeback-evidence-rules/)
-- [Agentic commerce for merchants in 2026 (Payment Review)](https://paymentreview.com/blog/agentic-commerce-merchants-2026/)
-- [Stripe: introduction to payment disputes](https://stripe.com/guides/introduction-to-payment-disputes)
-- [CertNode agentic commerce dispute defense](https://certnode.io/solutions/agentic-commerce)
-- [Chargebacks911 on agentic dispute risk (Finopotamus)](https://www.finopotamus.com/post/chargebacks911-warns-ai-agents-are-creating-a-new-era-of-dispute-risk-for-merchants-and-banks)
-- [Claude Commerce Agents and Copilot Checkout (Tech Insider)](https://tech-insider.org/?p=21278)
+- Legal-grade LLMs for agentic arbitration (internal research, September 2026)
+- [How network rules govern agentic commerce; x402 has no chargeback mechanism (Lexology)](https://www.lexology.com/library/detail.aspx?g=5c1b1a29-552a-4ec5-ac3d-d7bf0cc90793)
+- [Stripe Machine Payments Protocol (Eco)](https://eco.com/support/en/articles/14845486-stripe-machine-payments-protocol-mpp)
+- [What is agentic commerce: the 2026 guide, incl. Coinbase Agent.market (Eco)](https://eco.com/support/en/articles/14839400-what-is-agentic-commerce-the-2026-guide)
+- [Stripe Disputes API](https://docs.stripe.com/api/disputes)
+- [Stripe agentic commerce docs](https://docs.stripe.com/agentic-commerce)

@@ -27,8 +27,9 @@ export function PartnerForm() {
       </div>
       <select name="role" required defaultValue="" aria-label="I am a" className={`${field} appearance-none`}>
         <option value="" disabled className="text-foreground">I am a…</option>
-        <option value="merchant" className="text-foreground">Merchant on Stripe</option>
-        <option value="agent-builder" className="text-foreground">Agent builder</option>
+        <option value="buyer" className="text-foreground">Building a buyer agent</option>
+        <option value="seller" className="text-foreground">Building a seller agent</option>
+        <option value="marketplace" className="text-foreground">Running an agent marketplace</option>
         <option value="other" className="text-foreground">Something else</option>
       </select>
       <button

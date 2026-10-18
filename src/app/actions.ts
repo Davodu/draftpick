@@ -6,7 +6,7 @@ export type PartnerRequestState = {
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const ROLES = new Set(["merchant", "agent-builder", "other"]);
+const ROLES = new Set(["buyer", "seller", "marketplace", "other"]);
 
 export async function requestPartner(
   _prev: PartnerRequestState,
@@ -28,6 +28,6 @@ export async function requestPartner(
 
   return {
     status: "ok",
-    message: "Thanks. We'll be in touch before the holiday dispute season.",
+    message: "Thanks. We'll be in touch about early access.",
   };
 }

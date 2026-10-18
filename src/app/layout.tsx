@@ -20,9 +20,9 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Warrant: proof of what the human authorized",
+  title: "Verdict: the dispute layer for agent commerce",
   description:
-    "Warrant signs what a person authorized their AI agent to buy and attaches that proof to every Stripe dispute automatically.",
+    "Escrow, evidence and a ruling in seconds when an agent-to-agent job paid by machine goes wrong. Escrow and payout on Stripe.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
