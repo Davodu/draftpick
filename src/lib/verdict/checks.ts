@@ -1,12 +1,24 @@
 import "server-only";
 import { promises as dns } from "node:dns";
+import { blaxelConfigured, reproduceInSandbox } from "./sandbox";
 import type { Acceptance, LeadRow, Reproduction, RowCheck } from "./types";
 
 /**
- * Re-runs the contract's acceptance checks against the delivered rows.
- * Runs in-process today; the interface is the seam for an isolated sandbox runner.
+ * Re-runs the contract's acceptance checks against the delivered rows: in a Blaxel
+ * sandbox when configured, otherwise in-process (also the fallback if the sandbox fails).
  */
 export async function reproduce(rows: LeadRow[], acceptance: Acceptance): Promise<Reproduction> {
+  if (blaxelConfigured()) {
+    try {
+      return await reproduceInSandbox(rows, acceptance);
+    } catch (error) {
+      console.error("[reproduce] Blaxel sandbox failed, running in-process:", error instanceof Error ? error.message : error);
+    }
+  }
+  return reproduceInProcess(rows, acceptance);
+}
+
+async function reproduceInProcess(rows: LeadRow[], acceptance: Acceptance): Promise<Reproduction> {
   const started = Date.now();
   const mx = new Map<string, Promise<boolean>>();
   const hasMx = (domain: string) => {

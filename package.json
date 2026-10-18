@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.135.0",
+    "@armature-tech/mcp-analytics": "^0.6.47",
+    "@blaxel/core": "^0.3.30",
     "@modelcontextprotocol/server": "^2.3.1",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.118.0",
