@@ -1,5 +1,8 @@
 "use server";
 
+import { createClient } from "@/lib/supabase/server";
+import { supabaseConfigured } from "@/lib/supabase/env";
+
 export type PartnerRequestState = {
   status: "idle" | "ok" | "error";
   message?: string;
@@ -23,8 +26,18 @@ export async function requestPartner(
     return { status: "error", message: "Pick what best describes you." };
   }
 
-  // TODO: persist to Supabase / InsForge once the store is wired up.
-  console.log("[partner-request]", { email, company, role, at: new Date().toISOString() });
+  if (supabaseConfigured) {
+    const supabase = await createClient();
+    const { error } = await supabase
+      .from("early_access")
+      .insert({ email: email.toLowerCase(), company: company || null, role });
+    if (error) {
+      console.error("[early-access] insert failed", error.message);
+      return { status: "error", message: "Something went wrong. Please try again." };
+    }
+  } else {
+    console.log("[early-access] Supabase not configured", { email, company, role });
+  }
 
   return {
     status: "ok",

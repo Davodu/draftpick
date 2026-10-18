@@ -1,18 +1,7 @@
+import Link from "next/link";
+import { Logo } from "@/components/logo";
 import { PartnerForm } from "@/components/partner-form";
 import { RulingPanel } from "@/components/ruling-panel";
-
-function Logo() {
-  return (
-    <a href="#" className="flex items-center gap-2 text-lg font-semibold tracking-tight">
-      <svg viewBox="0 0 24 24" className="size-6" aria-hidden fill="none" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 3v17M7 20h10M4 7h16" stroke="var(--ink)" strokeWidth="1.5" />
-        <path d="M4 7l-2.5 6a2.5 2.5 0 005 0L4 7z" stroke="var(--ink)" strokeWidth="1.3" />
-        <path d="M20 7l-2.5 6a2.5 2.5 0 005 0L20 7z" stroke="var(--accent)" strokeWidth="1.3" />
-      </svg>
-      verdict
-    </a>
-  );
-}
 
 function Nav() {
   return (
@@ -24,13 +13,17 @@ function Nav() {
           <a href="#how" className="hover:text-foreground">How it works</a>
           <a href="#developers" className="hover:text-foreground">Developers</a>
         </div>
-        <a
-          href="#early-access"
-          className="rounded-lg bg-ink px-4 py-2 text-sm font-medium text-background transition hover:bg-accent"
-        >
-          <span className="sm:hidden">Join</span>
-          <span className="hidden sm:inline">Get early access</span>
-        </a>
+        <div className="flex items-center gap-2">
+          <Link href="/login" className="rounded-lg px-3 py-2 text-sm font-medium text-muted hover:text-foreground">
+            Sign in
+          </Link>
+          <Link
+            href="/signup"
+            className="rounded-lg bg-ink px-4 py-2 text-sm font-medium text-background transition hover:bg-accent"
+          >
+            Get started
+          </Link>
+        </div>
       </nav>
     </header>
   );
@@ -55,12 +48,12 @@ function Hero() {
             run on Stripe.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a
-              href="#early-access"
+            <Link
+              href="/signup"
               className="w-full rounded-lg bg-ink px-6 py-3 text-sm font-semibold text-background transition hover:bg-accent sm:w-auto"
             >
-              Get early access
-            </a>
+              Get started
+            </Link>
             <a
               href="#how"
               className="w-full rounded-lg border border-border bg-surface px-6 py-3 text-sm font-medium transition hover:border-ink/40 sm:w-auto"
