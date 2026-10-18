@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { ConnectAgent } from "@/components/connect-agent";
+import { HeroArt } from "@/components/hero-art";
 import { PartnerForm } from "@/components/partner-form";
 import { RulingPanel } from "@/components/ruling-panel";
 
@@ -32,49 +33,56 @@ function Nav() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="ruled-bg pointer-events-none absolute inset-0" />
-      <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-16 sm:px-6 sm:pt-24">
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 font-mono text-xs text-muted">
-            <span className="size-1.5 rounded-full bg-accent" />
-            The dispute layer for agent-to-agent commerce
-          </div>
-          <h1 className="text-balance font-serif text-5xl leading-[1.05] tracking-tight sm:text-7xl">
-            Cards have chargebacks. Machine payments have <em className="text-ink">nothing</em>.
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg text-muted">
-            When one agent pays another for work and gets junk back, Verdict holds the
-            funds, re-runs the work, and rules on the split in seconds. Escrow and payout
-            run on Stripe.
-          </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
-              href="/signup"
-              className="w-full rounded-lg bg-ink px-6 py-3 text-sm font-semibold text-background transition hover:bg-accent sm:w-auto"
-            >
-              Get started
-            </Link>
-            <a
-              href="#how"
-              className="w-full rounded-lg border border-border bg-surface px-6 py-3 text-sm font-medium transition hover:border-ink/40 sm:w-auto"
-            >
-              See how it works
-            </a>
+    <section className="relative px-3 pt-3 sm:px-5 sm:pt-5">
+      <div className="relative overflow-hidden rounded-[2rem] bg-ink shadow-[0_40px_120px_-40px_rgba(17,28,51,0.65)] sm:rounded-[2.5rem]">
+        <HeroArt />
+        <div className="relative mx-auto max-w-6xl px-5 pb-48 pt-16 sm:px-8 sm:pb-56 sm:pt-24">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 font-mono text-xs text-white/75 backdrop-blur">
+              <span className="relative flex size-1.5">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#9fd8b6] motion-reduce:hidden" />
+                <span className="relative inline-flex size-1.5 rounded-full bg-[#9fd8b6]" />
+              </span>
+              The dispute layer for agent-to-agent commerce
+            </div>
+            <h1 className="text-balance font-serif text-5xl leading-[1.02] tracking-tight text-[#f5f2ea] sm:text-7xl lg:text-[5.5rem]">
+              Cards have chargebacks. Machine payments have{" "}
+              <em className="bg-gradient-to-r from-[#9fd8b6] to-[#e7c48f] bg-clip-text pr-1 text-transparent">nothing</em>.
+            </h1>
+            <p className="mx-auto mt-7 max-w-2xl text-pretty text-lg text-white/65">
+              When one agent pays another for work and gets junk back, Verdict holds the
+              funds, re-runs the work, and rules on the split in seconds. Escrow and payout
+              run on Stripe.
+            </p>
+            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link
+                href="/signup"
+                className="w-full rounded-full bg-[#f5f2ea] px-7 py-3.5 text-sm font-semibold text-ink shadow-[0_8px_30px_-8px_rgba(159,216,182,0.6)] transition hover:bg-white sm:w-auto"
+              >
+                Get started
+              </Link>
+              <a
+                href="#how"
+                className="w-full rounded-full border border-white/20 px-7 py-3.5 text-sm font-medium text-white/90 transition hover:border-white/40 hover:bg-white/5 sm:w-auto"
+              >
+                See how it works
+              </a>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="mx-auto mt-16 max-w-5xl">
+      <div className="relative z-10 mx-auto -mt-36 max-w-5xl px-2 sm:-mt-44 sm:px-6">
+        <div className="rounded-[1.25rem] bg-background/60 p-2 shadow-[0_30px_80px_-30px_rgba(17,28,51,0.45)] ring-1 ring-ink/10 backdrop-blur sm:p-3">
           <RulingPanel />
-          <p className="mt-4 text-center font-mono text-xs text-muted">
-            Example: a buyer agent disputes a $5 data job. Verdict re-checks every row and splits the hold.
-          </p>
         </div>
+        <p className="mt-4 text-center font-mono text-xs text-muted">
+          Live replay of a real case: a buyer agent disputes a $5 data job. Verdict re-checks every row and splits the hold.
+        </p>
       </div>
     </section>
   );
 }
-
 
 const BUILT_WITH = [
   ["Stripe", "escrow + payout"],
@@ -430,6 +438,7 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
+        <div className="h-12 sm:h-16" />
         <BuiltWith />
         <Problem />
         <WhyNow />

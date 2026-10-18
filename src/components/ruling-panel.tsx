@@ -117,9 +117,7 @@ export function RulingPanel() {
 
       {/* Ruling */}
       <div
-        className={`relative min-w-0 overflow-hidden rounded-xl border border-ink/20 bg-surface p-5 shadow-[0_1px_0_rgba(0,0,0,0.04),0_12px_32px_-12px_rgba(27,42,74,0.25)] transition-all duration-700 ${
-          step >= RULING_STEP ? "opacity-100" : "opacity-40"
-        }`}
+        className={`relative min-w-0 overflow-hidden rounded-xl border border-ink/20 bg-surface p-5 shadow-[0_1px_0_rgba(0,0,0,0.04),0_12px_32px_-12px_rgba(27,42,74,0.25)]`}
       >
         <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-wider text-ink/70">
           <span>Verdict · ruling</span>

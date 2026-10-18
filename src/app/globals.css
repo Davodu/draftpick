@@ -131,3 +131,20 @@ body {
     animation: none;
   }
 }
+
+@keyframes hero-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hero-spin {
+  animation: hero-spin 120s linear infinite;
+  transform-origin: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-spin {
+    animation: none;
+  }
+}
