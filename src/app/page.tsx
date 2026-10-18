@@ -33,47 +33,45 @@ function Nav() {
 
 function Hero() {
   return (
-    <section className="relative px-3 pt-3 sm:px-5 sm:pt-5">
-      <div className="relative overflow-hidden rounded-[2rem] bg-ink shadow-[0_40px_120px_-40px_rgba(17,28,51,0.65)] sm:rounded-[2.5rem]">
+    <section className="px-3 pt-3 sm:px-5 sm:pt-5">
+      <div className="relative overflow-hidden rounded-[2rem] bg-[#070b14] shadow-[0_50px_140px_-48px_rgba(7,11,20,0.85)] ring-1 ring-white/10 sm:rounded-[2.5rem] lg:min-h-[680px]">
         <HeroArt />
-        <div className="relative mx-auto max-w-6xl px-5 pb-48 pt-16 sm:px-8 sm:pb-56 sm:pt-24">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 font-mono text-xs text-white/75 backdrop-blur">
-              <span className="relative flex size-1.5">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#9fd8b6] motion-reduce:hidden" />
-                <span className="relative inline-flex size-1.5 rounded-full bg-[#9fd8b6]" />
-              </span>
-              The dispute layer for agent-to-agent commerce
-            </div>
-            <h1 className="text-balance font-serif text-5xl leading-[1.02] tracking-tight text-[#f5f2ea] sm:text-7xl lg:text-[5.5rem]">
-              Cards have chargebacks. Machine payments have{" "}
-              <em className="bg-gradient-to-r from-[#9fd8b6] to-[#e7c48f] bg-clip-text pr-1 text-transparent">nothing</em>.
-            </h1>
-            <p className="mx-auto mt-7 max-w-2xl text-pretty text-lg text-white/65">
-              When one agent pays another for work and gets junk back, Verdict holds the
-              funds, re-runs the work, and rules on the split in seconds. Escrow and payout
-              run on Stripe.
-            </p>
-            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link
-                href="/signup"
-                className="w-full rounded-full bg-[#f5f2ea] px-7 py-3.5 text-sm font-semibold text-ink shadow-[0_8px_30px_-8px_rgba(159,216,182,0.6)] transition hover:bg-white sm:w-auto"
-              >
-                Get started
-              </Link>
-              <a
-                href="#how"
-                className="w-full rounded-full border border-white/20 px-7 py-3.5 text-sm font-medium text-white/90 transition hover:border-white/40 hover:bg-white/5 sm:w-auto"
-              >
-                See how it works
-              </a>
-            </div>
+        <div className="relative flex flex-col justify-center px-6 py-12 sm:px-12 sm:py-16 lg:min-h-[680px] lg:max-w-[38rem] lg:px-14 lg:py-20">
+          <div className="mb-7 inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 font-mono text-xs tracking-wide text-[#f5f2ea]/75">
+            <span className="relative flex size-1.5">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#e7c48f] motion-reduce:hidden" />
+              <span className="relative inline-flex size-1.5 rounded-full bg-[#e7c48f]" />
+            </span>
+            The dispute layer for agent-to-agent commerce
+          </div>
+          <h1 className="max-w-[16ch] text-balance font-serif text-5xl leading-[1.02] tracking-tight text-[#f5f2ea] sm:text-6xl lg:text-[4.5rem]">
+            Cards have chargebacks. Machine payments have{" "}
+            <em className="bg-gradient-to-r from-[#e7c48f] to-[#9fd8b6] bg-clip-text text-transparent">nothing</em>.
+          </h1>
+          <p className="mt-7 max-w-md text-pretty text-base leading-relaxed text-[#f5f2ea]/65 sm:text-lg">
+            When one agent pays another for work and gets junk back, Verdict holds the
+            funds, re-runs the work, and rules on the split in seconds. Escrow and payout
+            run on Stripe.
+          </p>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/signup"
+              className="rounded-full bg-[#f5f2ea] px-7 py-3.5 text-center text-sm font-semibold text-ink shadow-[0_10px_40px_-12px_rgba(231,196,143,0.7)] transition hover:bg-white"
+            >
+              Get started
+            </Link>
+            <a
+              href="#how"
+              className="rounded-full border border-white/20 px-7 py-3.5 text-center text-sm font-medium text-[#f5f2ea]/90 transition hover:border-white/40 hover:bg-white/5"
+            >
+              See how it works
+            </a>
           </div>
         </div>
       </div>
 
-      <div className="relative z-10 mx-auto -mt-36 max-w-5xl px-2 sm:-mt-44 sm:px-6">
-        <div className="rounded-[1.25rem] bg-background/60 p-2 shadow-[0_30px_80px_-30px_rgba(17,28,51,0.45)] ring-1 ring-ink/10 backdrop-blur sm:p-3">
+      <div className="mx-auto mt-8 max-w-5xl px-2 sm:mt-12 sm:px-6">
+        <div className="rounded-[1.25rem] bg-background/80 p-2 shadow-[0_30px_80px_-36px_rgba(17,28,51,0.45)] ring-1 ring-ink/10 sm:p-3">
           <RulingPanel />
         </div>
         <p className="mt-4 text-center font-mono text-xs text-muted">
