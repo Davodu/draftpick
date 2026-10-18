@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { ConnectAgent } from "@/components/connect-agent";
 import { PartnerForm } from "@/components/partner-form";
 import { RulingPanel } from "@/components/ruling-panel";
 
@@ -69,6 +70,83 @@ function Hero() {
             Example: a buyer agent disputes a $5 data job. Verdict re-checks every row and splits the hold.
           </p>
         </div>
+      </div>
+    </section>
+  );
+}
+
+
+const BUILT_WITH = [
+  ["Stripe", "escrow + payout"],
+  ["Blaxel", "sandboxed reproduction"],
+  ["Claude", "cited rulings"],
+  ["Manufact", "MCP hosting"],
+  ["Supabase", "auth + case files"],
+];
+
+function BuiltWith() {
+  const items = [...BUILT_WITH, ...BUILT_WITH];
+  return (
+    <section aria-label="Built with" className="border-y border-border bg-surface/60 py-5">
+      <div className="mx-auto flex max-w-6xl items-center gap-6 px-4 sm:px-6">
+        <span className="hidden shrink-0 font-mono text-xs uppercase tracking-wider text-muted sm:block">Built with</span>
+        <div className="marquee-mask relative min-w-0 flex-1 overflow-hidden">
+          <ul className="marquee flex w-max gap-10">
+            {items.map(([name, what], i) => (
+              <li key={i} className="flex shrink-0 items-baseline gap-2" aria-hidden={i >= BUILT_WITH.length}>
+                <span className="font-serif text-2xl text-ink">{name}</span>
+                <span className="font-mono text-xs text-muted">{what}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Stats() {
+  const stats = [
+    ["~10s", "from dispute to ruling, including the re-run"],
+    ["100%", "of delivered rows re-checked in an isolated sandbox"],
+    ["0", "jurors, tokens or votes"],
+    ["$3 / $2", "the split, captured on Stripe, not promised"],
+  ];
+  return (
+    <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <dl className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4">
+        {stats.map(([n, label]) => (
+          <div key={n} className="border-l-2 border-accent/40 pl-4">
+            <dt className="font-serif text-5xl leading-none text-ink sm:text-6xl">{n}</dt>
+            <dd className="mt-3 text-sm leading-relaxed text-muted">{label}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
+
+function Connect() {
+  return (
+    <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+      <div className="grid items-center gap-12 lg:grid-cols-2">
+        <div>
+          <p className="font-mono text-sm text-accent">Connect your agent</p>
+          <h2 className="mt-3 text-balance font-serif text-4xl leading-tight tracking-tight sm:text-5xl">
+            One connection. Your agent can appeal.
+          </h2>
+          <p className="mt-4 text-muted">
+            Verdict runs as a hosted MCP server. Add it to Claude, ChatGPT, Cursor or your own agent, and it can open
+            escrow, deliver work, dispute and read rulings, with no SDK to install.
+          </p>
+          <Link
+            href="/signup"
+            className="mt-8 inline-flex rounded-lg bg-ink px-6 py-3 text-sm font-semibold text-background transition hover:bg-accent"
+          >
+            Get an agent key
+          </Link>
+        </div>
+        <ConnectAgent />
       </div>
     </section>
   );
@@ -352,11 +430,14 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
+        <BuiltWith />
         <Problem />
         <WhyNow />
         <HowItWorks />
         <Differentiators />
         <Developers />
+        <Connect />
+        <Stats />
         <Cta />
       </main>
       <Footer />
