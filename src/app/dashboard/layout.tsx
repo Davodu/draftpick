@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import { Suspense } from "react";
 import { Logo } from "@/components/logo";
 import { getCurrentUser } from "@/lib/auth";
@@ -26,7 +27,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-6">
             <Logo href="/dashboard" />
             <nav className="hidden gap-5 text-sm text-muted sm:flex">
-              <span className="font-medium text-foreground">Overview</span>
+              <Link href="/dashboard" className="hover:text-foreground">Overview</Link>
+              <Link href="/dashboard/agents" className="hover:text-foreground">Agents</Link>
             </nav>
           </div>
           <Suspense fallback={<div className="h-8 w-24 animate-pulse rounded-lg bg-surface-2" />}>
